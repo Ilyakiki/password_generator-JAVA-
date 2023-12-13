@@ -1,48 +1,84 @@
 import java.util.Date;
+import java.util.Scanner;
 
 // Press Shift twice to open the Search Everywhere dialog and type show whitespaces,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
 
-    public static char[] setup(boolean using_symbols, boolean using_nums, boolean using_big) {
-        String USING_SYMBOLS = "";
-        String ENG_MINI = "abcdefghijklmnopqrstuvwxyz";
-        USING_SYMBOLS += ENG_MINI;
-        if (using_symbols == true) {
-            String SYMBOLS = "!@#$%^&*";
-            USING_SYMBOLS += SYMBOLS;
+    public static int set_length() {
+        int length;
+        Scanner in = new Scanner(System.in);
+        try {
+            length = in.nextInt();
         }
-        if (using_nums==true){
-            String NUMS="0123456789";
-            USING_SYMBOLS += NUMS;
+        catch (Exception e) {
+            System.out.println("Введенное значение не int, будет подставлено значение 10000");
+            length = 10000;
         }
-        if (using_big==true) {
-            String ENG_BIG = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            USING_SYMBOLS += ENG_BIG;
-        }
-        return USING_SYMBOLS.toCharArray();
+        return length;
     }
-    public static int rnd(int min, int max) {
-        max -= min;
-        return (int) (Math.random() * ++max) + min;
+
+    public static boolean set_bool() {
+        boolean b;
+        Scanner in = new Scanner(System.in);
+        try {
+            b = in.nextBoolean();
+        } catch (Exception e) {
+            System.out.println("Введенное значение не boolean, будет подставлено значение true");
+            b = true;
+        }
+        return b;
     }
+
+    public static void test_cases_pass(PasswordGenerator password) {
+        System.out.println("Тесты");
+        System.out.println("\nВо время тестов будет выведено время генерации и их длинна, сами пароли отображаться не будут\n");
+        for (int i=0;i<3;i++){
+            Date time1=new Date();
+            int len = 10000*(int)Math.pow(10.0,i);
+            password.pass_gen(len, true, true, true);
+            Date time2=new Date();
+            Long time_diff= time2.getTime()- time1.getTime();
+            System.out.print("Длинна тестового пароля пароля ");
+            System.out.printf(String.valueOf(len));
+            String time_diff_str="\nЗатраченное время (в миллисекундах): ".concat(time_diff.toString()).concat("\n");
+            System.out.println(time_diff_str);
+        }
+    }
+
+    public static char[] gen_method_password(PasswordGenerator password) {
+        System.out.println("Введите длинну желаемого пароля");
+        int len = set_length();
+        System.out.println("Хотите ли использовать спец символы? true - да, false - нет.");
+        boolean using_symbols = set_bool();
+        System.out.println("Хотите ли использовать цифры? true - да, false - нет.");
+        boolean using_nums = set_bool();
+        System.out.println("Хотите ли использовать верхний регистр? true - да, false - нет.");
+        boolean using_big = set_bool();
+        Date time1=new Date();
+        char[] ready_password = password.pass_gen(len, using_symbols, using_nums, using_big);
+        Date time2=new Date();
+        Long time_diff= time2.getTime()- time1.getTime();
+        String time_diff_str="Затраченное время (в миллисекундах): ".concat(time_diff.toString());
+        System.out.println(time_diff_str);
+        return ready_password;
+    }
+
     public static void main(String[] args) {
-        Date date1 = new Date();
-        System.out.println(date1.getTime());
-        int min = 10000;
-        int max = 1000000;
-        int symbols_num = rnd(min, max);
-        char[] SYMBOLS = setup(true, true, true);
-        char[] password = new char[symbols_num];
-        char alfa;
-        for (int i = 0; i < symbols_num; i++) {
-            int n = rnd(0, SYMBOLS.length - 1);
-            alfa = SYMBOLS[n];
-            password[i] = alfa;
+        try {
+            PasswordGenerator password_gen = new PasswordGenerator();
+            test_cases_pass(password_gen);
+            boolean choice = true;
+            char[] pass;
+            System.out.println("Генерация пароля по заданным параметрам");
+            while (choice == true) {
+                pass = gen_method_password(password_gen);
+                System.out.println(pass);
+                System.out.println("Хотите продолжить? true - да, false - нет.");
+                choice = set_bool();
+            }
+        } catch (Exception e) {
+            ExceptionHandler.handle(e);
         }
-        //System.out.println(password);
-        Date date2 = new Date();
-        System.out.println(date2.getTime());
-        System.out.println(date2.getTime()-date1.getTime());
     }
 }
