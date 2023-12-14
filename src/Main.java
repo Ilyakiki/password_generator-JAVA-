@@ -4,7 +4,7 @@ import java.util.Scanner;
 // Press Shift twice to open the Search Everywhere dialog and type show whitespaces,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
-
+    //Метод для ввода длинны пароля
     public static int set_length() {
         int length;
         Scanner in = new Scanner(System.in);
@@ -17,7 +17,7 @@ public class Main {
         }
         return length;
     }
-
+    //Метод для ввода логических данных
     public static boolean set_bool() {
         boolean b;
         Scanner in = new Scanner(System.in);
@@ -29,7 +29,7 @@ public class Main {
         }
         return b;
     }
-
+    //Тестовые кейсы при разных условиях
     public static void test_cases_pass(PasswordGenerator password) {
         System.out.println("Тесты");
         System.out.println("\nВо время тестов будет выведено время генерации и их длинна, сами пароли отображаться не будут\n");
@@ -45,7 +45,7 @@ public class Main {
             System.out.println(time_diff_str);
         }
     }
-
+    //Метод для генерации пароля
     public static char[] gen_method_password(PasswordGenerator password) {
         System.out.println("Введите длинну желаемого пароля");
         int len = set_length();
@@ -58,6 +58,7 @@ public class Main {
         Date time1=new Date();
         char[] ready_password = password.pass_gen(len, using_symbols, using_nums, using_big);
         Date time2=new Date();
+        //Подсчет времени затраченного на генерацию пароля
         Long time_diff= time2.getTime()- time1.getTime();
         String time_diff_str="Затраченное время (в миллисекундах): ".concat(time_diff.toString());
         System.out.println(time_diff_str);
